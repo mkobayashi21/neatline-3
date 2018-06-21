@@ -1,3 +1,6 @@
+// All of the actions live here...
+// if this gets unweildy, it can be split into multiple files
+
 // Map preview
 export const SET_TILELAYER = 'SET_TILELAYER';
 export const SET_AVAILABLE_TILELAYERS = 'SET_AVAILABLE_TILELAYERS';
@@ -23,8 +26,6 @@ export const RECORD_REPLACED = 'exhibitShow/RECORD_REPLACED';
 export const RECORD_REMOVED = 'exhibitShow/RECORD_REMOVED';
 export const RECORD_COVERAGE_SET = 'exhibitShow/RECORD_COVERAGE_SET';
 
-
-
 // Records
 export const RECORD_ERROR = 'RECORD_ERROR';
 export const NEW_RECORD_RESET = 'recordCreate/NEW_RECORD_RESET';
@@ -37,9 +38,6 @@ export const DELETE_RECORD_RESPONSE_RECEIVED = 'DELETE_RECORD_RESPONSE_RECEIVED'
 
 export const RECORD_UPDATE = 'recordUpdate/RECORD_UPDATE';
 export const UPDATE_RECORD_RESPONSE_RECEIVED = 'UPDATE_RECORD_RESPONSE_RECEIVED';
-
-
-
 
 export const EXHIBIT_UPDATED = 'exhibitUpdate/EXHIBIT_CREATED';
 export const EXHIBIT_PATCH_SUCCESS = 'exhibitUpdate/EXHIBIT_POST_SUCCESS';

@@ -8,7 +8,7 @@ export default function(state = initialState, action) {
 		case actionType.CREATE_RECORD_RESPONSE_RECEIVED:
 
 			// Failed with error from API server
-			if(typeof action.payload.errors !== 'undefined'){
+			if (typeof action.payload.errors !== 'undefined') {
 				console.error(`CREATE_RECORD_ERROR: ${action.payload.errors.error}`);
 				return {
 					...state,
@@ -16,7 +16,7 @@ export default function(state = initialState, action) {
 				};
 
 			// Accepted (RECORD_CREATED)
-			}else{
+			} else {
 				return {
 					...state,
 					loading: false,
@@ -25,12 +25,11 @@ export default function(state = initialState, action) {
 				};
 			}
 
-
 		// Handle response from delete record API call
 		case actionType.DELETE_RECORD_RESPONSE_RECEIVED:
 
 			// Failed with error from API server
-			if(typeof action.payload.errors !== 'undefined'){
+			if (typeof action.payload.errors !== 'undefined') {
 				console.error(`DELETE_RECORD_ERROR: ${action.payload.errors.error}`);
 				return {
 					...state,
@@ -38,7 +37,7 @@ export default function(state = initialState, action) {
 				};
 
 			// Accepted (RECORD_DELETED)
-			}else{
+			} else {
 				return {
 					...state,
 					loading: false,
@@ -46,20 +45,19 @@ export default function(state = initialState, action) {
 				};
 			}
 
-
 		// Handle response from update record API call
 		case actionType.UPDATE_RECORD_RESPONSE_RECEIVED:
 
 			// Failed with error from API server
-			if(typeof action.payload.errors !== 'undefined'){
+			if (typeof action.payload.errors !== 'undefined') {
 				console.error(`UPDATE_RECORD_ERROR: ${action.payload.errors.error}`);
 				return {
 					...state,
 					error: 'Error Updating record'
 				};
 
-			// Accepted
-			}else{
+				// Accepted
+			} else {
 				return {
 					...state,
 					loading: false,

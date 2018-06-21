@@ -1,12 +1,14 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
-import user from './user';
-import exhibits from './exhibits';
-import exhibitShow from './exhibitShow';
-import exhibitCreate from './exhibitCreate';
-import exhibitUpdate from './exhibitUpdate';
-import exhibitDelete from './exhibitDelete';
+import user from './not_refactored/user';
+import exhibits from './not_refactored/exhibits';
+import exhibitShow from './not_refactored/exhibitShow';
+import exhibitCreate from './not_refactored/exhibitCreate';
+import exhibitUpdate from './not_refactored/exhibitUpdate';
+import exhibitDelete from './not_refactored/exhibitDelete';
+import recordMapLayers from './not_refactored/recordMapLayers';
+
 import recordReducer from './reducer-record.js';
 import mapReducer from './reducer-map.js';
 export default combineReducers({
@@ -20,5 +22,6 @@ export default combineReducers({
   exhibitDelete,
 
   record: recordReducer,
-  map: mapReducer
+  map: mapReducer,
+  recordMapLayers:recordMapLayers
 });

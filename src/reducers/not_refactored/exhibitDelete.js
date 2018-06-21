@@ -1,4 +1,4 @@
-import { urlFormat, exhibitsEndpoint } from '../sagas/api_helper.js';
+import { urlFormat, exhibitsEndpoint } from '../../sagas/api_helper.js';
 import { fetchExhibits } from './exhibits';
 
 export const EXHIBIT_DELETED = 'exhibitDelete/EXHIBIT_DELETED';

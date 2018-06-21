@@ -1,4 +1,4 @@
-import { urlFormat, exhibitsEndpoint, parseExhibitsJSON } from '../sagas/api_helper.js'
+import { urlFormat, exhibitsEndpoint, parseExhibitsJSON } from '../../sagas/api_helper.js'
 
 export const EXHIBITS_LOADING = 'exhibits/EXHIBITS_LOADING';
 export const EXHIBITS_ERRORED = 'exhibits/EXHIBITS_ERRORED';

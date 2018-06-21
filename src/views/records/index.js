@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { selectRecord } from '../../modules/exhibitShow';
+import { selectRecord } from '../../reducers/not_refactored/exhibitShow';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -9,19 +9,19 @@ const Records = props => (
     <Link to={`${props.exhibitShowURL}/edit/new`}>New Record</Link>
     <ul>
       {props.records.map(record => (
-        <li key={'record-' + record['o:id']} style={{ fontWeight: record === props.selectedRecord ? 'bold' : 'normal' }}><Link to={`${props.exhibitShowURL}/edit/${record['o:id']}`}>{record['o:title']}</Link></li>
+        <li key={'record-' + record['o:id']} style={{ fontWeight: record === props.selectedRecord ? 'bold' : 'normal' }}><Link to={`${props.exhibitShowURL}/edit/${record['o:id']}`}>{record['o:title']===null?"UNTITLED":record['o:title']}</Link></li>
       ))}
     </ul>
   </div>
 )
 
 const mapStateToProps = state => ({
-  records: state.exhibitShow.records,
-  selectedRecord: state.exhibitShow.selectedRecord
+	  records: state.exhibitShow.records,
+	  selectedRecord: state.exhibitShow.selectedRecord
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  selectRecord
+  	selectRecord
 }, dispatch);
 
 export default connect(

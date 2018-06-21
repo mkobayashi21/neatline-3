@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { fetchExhibitWithRecords, setTabIndex, unsetEditorRecord } from '../../modules/exhibitShow';
+import { fetchExhibitWithRecords, setTabIndex, unsetEditorRecord } from '../../reducers/not_refactored/exhibitShow';
 import ExhibitUpdate from './update';
 import ExhibitPublicMap from '../../components/map';
 import RecordInfoPanel from '../../components/info';

@@ -1,11 +1,9 @@
-import { urlFormat, exhibitsEndpoint } from './apiHelper';
+import { urlFormat, exhibitsEndpoint } from '../../sagas/api_helper.js';
 import { fetchExhibits } from './exhibits';
-import { EXHIBIT_LOADED } from './exhibitShow';
 import { replace } from 'react-router-redux'
 
-export const EXHIBIT_UPDATED = 'exhibitUpdate/EXHIBIT_CREATED';
-export const EXHIBIT_PATCH_SUCCESS = 'exhibitUpdate/EXHIBIT_POST_SUCCESS';
-export const EXHIBIT_PATCH_ERRORED = 'exhibitUpdate/EXHIBIT_POST_ERRORED';
+import * as actionType from '../../actions/action-types';
+
 
 const initialState = {
   changedExhibit: null,
@@ -15,21 +13,21 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case EXHIBIT_UPDATED:
+    case actionType.EXHIBIT_UPDATED:
       return {
         ...state,
         loading: true,
         changedExhibit: action.exhibit
       };
 
-    case EXHIBIT_PATCH_SUCCESS:
+    case actionType.EXHIBIT_PATCH_SUCCESS:
       return {
         ...state,
         loading: false,
         changedExhibit: initialState.changedExhibit
       };
 
-    case EXHIBIT_PATCH_ERRORED:
+    case actionType.EXHIBIT_PATCH_ERRORED:
       return {
         ...state,
         errored: true
@@ -43,7 +41,7 @@ export default function(state = initialState, action) {
 export function updateExhibit(exhibit) {
   return function(dispatch) {
     dispatch({
-      type: EXHIBIT_UPDATED,
+      type: actionType.EXHIBIT_UPDATED,
       exhibit
     });
 
@@ -61,16 +59,16 @@ export function updateExhibit(exhibit) {
         }
       })
       .then(() => dispatch({
-        type: EXHIBIT_PATCH_SUCCESS
+        type: actionType.EXHIBIT_PATCH_SUCCESS
       }))
       .then(() => dispatch({
-        type: EXHIBIT_LOADED,
+        type: actionType.EXHIBIT_LOADED,
         exhibit: exhibit
       }))
       .then(() => dispatch(replace(window.baseRoute + '/show/' + exhibit['o:slug'])))
       .then(() => dispatch(fetchExhibits()))
       .catch(() => dispatch({
-        type: EXHIBIT_PATCH_ERRORED
+        type: actionType.EXHIBIT_PATCH_ERRORED
       }));
   }
 }

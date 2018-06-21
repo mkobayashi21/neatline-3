@@ -1,6 +1,6 @@
 import React from 'react';
 import ExhibitForm from '../../components/exhibitForm';
-import { updateExhibit } from '../../modules/exhibitUpdate';
+import { updateExhibit } from '../../reducers/not_refactored/exhibitUpdate';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 

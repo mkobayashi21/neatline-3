@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
 import RecordForm from '../../components/recordForm';
-import { updateRecord } from '../../modules/recordUpdate';
-import { deleteRecord } from '../../modules/recordDelete';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { updateRecord, deleteRecord } from '../../actions';
+
 
 class RecordUpdate extends Component {
   render() {
-    const { record, submit, loading, errored, deleteRecord } = this.props;
+    const { record, submit, loading, deleteRecord } = this.props;
 
     if (record) {
       return (
         <div>
           <RecordForm onSubmit={submit} submitLabel='Save' disabled={loading} showDelete={true} handleDelete={() => deleteRecord(record)} />
-          {errored &&
-            <p>Error: failed to save record</p>
-          }
+          <p>{this.props.record.error}</p>
         </div>
       );
     }
@@ -26,9 +24,7 @@ class RecordUpdate extends Component {
 }
 
 const mapStateToProps = state => ({
-  record: state.exhibitShow.editorRecord,
-  loading: state.recordUpdate.loading,
-  errored: state.recordCreate.errored
+  record: state.record
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

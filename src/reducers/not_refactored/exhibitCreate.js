@@ -1,4 +1,4 @@
-import { urlFormat, exhibitsEndpoint } from '../sagas/api_helper.js';
+import { urlFormat, exhibitsEndpoint } from '../../sagas/api_helper.js';
 import { push } from 'react-router-redux';
 
 export const EXHIBIT_CREATED = 'exhibitCreate/EXHIBIT_CREATED';

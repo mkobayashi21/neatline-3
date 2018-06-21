@@ -1,18 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { Field, reduxForm } from 'redux-form'
 import { connect } from 'react-redux';
 import '../css/exhibitForm.css';
-
-const layerTypes = [
-  'OpenStreetMap',
-  'GooglePhysical',
-  'GoogleStreets',
-  'GoogleHybrid',
-  'GoogleSatellite',
-  'StamenToner',
-  'StamenWatercolor',
-  'StamenTerrain'
-];
+import {set_tileLayer,set_availableTileLayers} from '../actions';
 
 const defaultValues = {
   'o:spatial_layers': [],
@@ -20,19 +10,63 @@ const defaultValues = {
   'o:spatial_querying': true
 };
 
-const LayerTypeOptions = props => (
-  <optgroup label='Default Layers'>
-    {layerTypes.map(layerType => (
-      <option value={layerType} key={'layerTypeOption-' + layerType}>{layerType}</option>
-    ))}
-  </optgroup>
-)
 
-let ExhibitForm = props => {
-  const { exhibit, handleSubmit, submitLabel, disabled } = props;
+
+class ExhibitForm extends Component {
+
+	// Build layertypes from the set of non-deprecated maps
+	layerTypes = () => {
+		let retval=[];
+		var availableBaseMaps=this.props.mapState.available.baseMaps;
+		Object.keys(availableBaseMaps).forEach(function (key) {
+		  let thisMap = availableBaseMaps[key];
+		  if(!thisMap.deprecated){
+			  retval.push(thisMap);
+		  }
+		});
+		return retval;
+	};
+	buildLayerTypeOptions = () => {
+		var retval = [];
+		//this.layerTypes().map((layerType) => {
+		let layerTyepes=this.layerTypes();
+		Object.keys(layerTyepes).forEach(function (key) {
+			let layerType = layerTyepes[key];
+			let opt_key = `layerTypeOption-${key}`;
+		  	retval.push(<option value={key} key={opt_key}>{layerType.displayName}</option>);
+		} );
+		return retval;
+	};
+
+
+	constructor (props) {
+		super(props);
+
+		// Redux Actions, bind to this
+		this.set_tileLayer = set_tileLayer;
+		this.set_availableTileLayers = set_availableTileLayers;
+
+		// Mapping to this
+		this.exhibit = props.exhibit;
+		this.handleSubmit = props.handleSubmit;
+		this.submitLabel=props.submitLabel;
+		this.disabled = props.disabled;
+		this.layerTypeOptions=this.buildLayerTypeOptions();
+	}
+
+
+  spatialLayerPreview = (event) =>{
+	  this.props.dispatch(this.set_tileLayer({id:event.target.value}));
+  }
+
+  enabledSpatialLayerPreview = (event) =>{
+	let arrayOfIDs = [...event.target.options].filter(({selected}) => selected).map(({value}) => value);
+	this.props.dispatch(this.set_availableTileLayers({ids:arrayOfIDs}));
+  }
+render() {
   return (
-    <form className='exhibit-form' onSubmit={handleSubmit}>
-      <fieldset disabled={disabled} style={{ border: 'none', padding: '0' }}>
+    <form className='exhibit-form' onSubmit={this.handleSubmit}>
+      <fieldset disabled={this.disabled} style={{ border: 'none', padding: '0' }}>
         <div>
           <label htmlFor='o:title'>Title</label>
           <Field name='o:title' component='input' type='text' />
@@ -51,16 +85,18 @@ let ExhibitForm = props => {
         </div>
         <div>
           <label htmlFor='o:spatial_layers'>Enabled Spatial Layers</label>
-          <Field name='o:spatial_layers' component='select' multiple>
-            <LayerTypeOptions />
+          <Field name='o:spatial_layers' component='select' multiple onChange={this.enabledSpatialLayerPreview}>
+            {this.layerTypeOptions}
           </Field>
         </div>
         <div>
           <label htmlFor='o:spatial_layer'>Default Spatial Layer</label>
-          <Field name='o:spatial_layer' component='select'>
-            <LayerTypeOptions />
-            <option value='no_spatial_layer'>None (Image or WMS as Default)</option>
-          </Field>
+		  <Field name='o:spatial_layer' component='select' onChange={this.spatialLayerPreview}>
+		  			  <optgroup label='Default Layers'>
+		  				{this.layerTypeOptions}
+		  			  </optgroup>
+		  	            <option value='no_spatial_layer'>None (Image or WMS as Default)</option>
+		  </Field>
         </div>
         <div>
           <label htmlFor='o:image_layer'>Image Layer</label>
@@ -86,13 +122,13 @@ let ExhibitForm = props => {
           <label htmlFor='o:public'>Public</label>
           <Field name='o:public' component='input' type='checkbox' />
         </div>
-        {exhibit && exhibit['o:id'] &&
+        {this.exhibit && this.exhibit['o:id'] &&
           <Field name='o:id' component='input' type='hidden' />
         }
-        <button type='submit'>{submitLabel}</button>
+        <button type='submit'>{this.submitLabel}</button>
       </fieldset>
     </form>
-  );
+);}
 }
 
 ExhibitForm = reduxForm({
@@ -100,6 +136,7 @@ ExhibitForm = reduxForm({
 })(ExhibitForm);
 
 const mapStateToProps = state => ({
+	mapState: state.map,
   initialValues: state.exhibitShow.exhibit ? state.exhibitShow.exhibit : defaultValues
 });
 

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { change } from 'redux-form';
+
 // Makes availabe to mapStateToProps
-import { selectRecord, deselectRecord, previewRecord, unpreviewRecord } from '../modules/exhibitShow';
-import { addLayer, resetLayers } from '../modules/recordMapLayers';
+import { selectRecord, deselectRecord, previewRecord, unpreviewRecord } from '../reducers/not_refactored/exhibitShow';
+import { addLayer, resetLayers } from '../reducers/not_refactored/recordMapLayers';
 
 import { Map, LayersControl, TileLayer, WMSTileLayer, GeoJSON, FeatureGroup } from 'react-leaflet';
 import L from 'leaflet';
@@ -96,6 +97,7 @@ class ExhibitPublicMap extends Component {
 	}
 	*/
 	_onChange = () => {
+
     // console.log(this.fg_layers);
     // if (this.fg_layers.length  > 0) {
   		// var featureGroup = L.featureGroup(this.fg_layers);
@@ -107,24 +109,47 @@ class ExhibitPublicMap extends Component {
   		const geojsonData = featureGroup.toGeoJSON();
       this.props.change('record', 'o:coverage', geojsonData);
       this.props.change('record', 'o:is_coverage', true);
-    }
+  }
 	}
 
 	//////////////////////////////////////////////////
 	// Render Method
 	//////////////////////////////////////////////////
 	render() {
+
+		// The primary layer
+		let baseLayers=[];
+		baseLayers.push(
+			<LayersControl.BaseLayer key={this.props.mapState.current.tileLayer.slug} name={this.props.mapState.current.tileLayer.displayName} checked={true}>
+				  <TileLayer
+					  attribution={this.props.mapState.current.tileLayer.attribution}
+					  url={this.props.mapState.current.tileLayer.url}/>
+			</LayersControl.BaseLayer>
+		);
+
+		// Other options
+		for(let x=0;x<this.props.mapState.current.basemapOptions.length;x++){
+			let thisTileLayer = this.props.mapState.current.basemapOptions[x];
+			// Don't allow duplicate
+			if(thisTileLayer.slug !== this.props.mapState.current.tileLayer.slug){
+				baseLayers.push(
+					<LayersControl.BaseLayer key={thisTileLayer.slug} name={thisTileLayer.displayName} checked={false}>
+						  <TileLayer
+							  attribution={thisTileLayer.attribution}
+							  url={thisTileLayer.url}/>
+					</LayersControl.BaseLayer>
+				);
+			}
+		}
+
 	    const { records, recordClick, mapClick, recordMouseEnter, recordMouseLeave, selectedRecord, previewedRecord } = this.props;
 	    const position = [51.505, -0.09];
 
 	    return (
 			<Map center={position} zoom={13} style={{ height: '100%' }} onClick={(event) => { if (event.originalEvent.target === event.target.getContainer()) mapClick(); }}>
 				<LayersControl position='topright'>
-					<LayersControl.BaseLayer name='OpenStreetMap' checked={true}>
-					  <TileLayer
-					      attribution='&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors'
-					      url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'/>
-					</LayersControl.BaseLayer>
+
+					{baseLayers}
 
 					{/* Conditional, featuregroup appears if this.props is true */}
 					{(this.props.editorRecord || this.props.editorNewRecord) &&
@@ -192,13 +217,14 @@ class ExhibitPublicMap extends Component {
 
 // maps this.props.*
 const mapStateToProps = state => ({
+	mapState: state.map,
 	exhibit: state.exhibitShow.exhibit,
 	records: state.exhibitShow.records,
 	selectedRecord: state.exhibitShow.selectedRecord,
 	previewedRecord: state.exhibitShow.previewedRecord,
 	editorRecord: state.exhibitShow.editorRecord,
 	editorNewRecord: state.exhibitShow.editorNewRecord,
-  recordLayers: state.recordMapLayers.recordLayers
+  	recordLayers: state.recordMapLayers.recordLayers
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

@@ -18,7 +18,6 @@ import {
 import L from 'leaflet';
 import {EditControl} from "react-leaflet-draw"
 import {circleMarker} from 'leaflet';
-import {faUndo} from '@fortawesome/fontawesome-free-solid'
 
 // FIXME: work around broken icons when using webpack, see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;

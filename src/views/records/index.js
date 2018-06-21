@@ -9,14 +9,10 @@ const Records = props => (<div>
 	<ul>
 		{
 			props.records.map(record => (<li key={'record-' + record['o:id']} style={{
-					fontWeight: record === props.selectedRecord
-						? 'bold'
-						: 'normal'
+					fontWeight: record === props.selectedRecord? 'bold': 'normal'
 				}}>
 				<Link to={`${props.exhibitShowURL}/edit/${record['o:id']}`}>{
-						record['o:title'] === null
-							? "UNTITLED"
-							: record['o:title']
+						record['o:title'] === null?"UNTITLED":record['o:title']
 					}</Link>
 			</li>))
 		}

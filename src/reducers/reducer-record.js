@@ -4,6 +4,15 @@ import * as actionType from '../actions/action-types';
 export default function(state = initialState, action) {
 	switch (action.type) {
 
+		// On initiate create...
+		case actionType.RECORD_CREATE:
+			return {
+			  ...state,
+			  loading: true,
+			  newRecord: action.payload
+			};
+
+
 		// Handle response from create record API call
 		case actionType.CREATE_RECORD_RESPONSE_RECEIVED:
 
@@ -25,12 +34,20 @@ export default function(state = initialState, action) {
 				};
 			}
 
+
+		// On initiate delete...
+		case actionType.RECORD_DELETE:
+			return {
+	          ...state,
+	          loading: true
+	        };
+
 		// Handle response from delete record API call
 		case actionType.DELETE_RECORD_RESPONSE_RECEIVED:
 
 			// Failed with error from API server
-			if (typeof action.payload.errors !== 'undefined') {
-				console.error(`DELETE_RECORD_ERROR: ${action.payload.errors.error}`);
+			if (typeof action.payload.jsonResponse.errors !== 'undefined') {
+				console.error(`DELETE_RECORD_ERROR: ${action.payload.jsonResponse.errors.error}`);
 				return {
 					...state,
 					error: 'Error deleting record'

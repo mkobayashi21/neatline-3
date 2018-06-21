@@ -1,5 +1,6 @@
 import { urlFormat, recordsEndpoint } from './api_helper.js';
 import {put,takeLatest,all} from 'redux-saga/effects';
+//import { push } from 'react-router-redux';
 import * as actions from '../actions/action-types';
 
 const JSON_HEADERS = {
@@ -13,11 +14,16 @@ export default function* rootSaga() {
 		takeLatest(actions.RECORD_CREATE, createRecord),
 		takeLatest(actions.RECORD_DELETE, deleteRecord),
 		takeLatest(actions.RECORD_UPDATE, updateRecord),
+		takeLatest(actions.CREATE_RECORD_RESPONSE_RECEIVED, createRecordResponseReceived),
+		takeLatest(actions.DELETE_RECORD_RESPONSE_RECEIVED, deleteRecordResponseReceived),
+		takeLatest(actions.UPDATE_RECORD_RESPONSE_RECEIVED, updateRecordResponseReceived)
 	])
 }
 
 // Create a record
 function* createRecord(action) {
+
+	// Make API call
 	try{
 		let url = urlFormat(recordsEndpoint);
 		const response = yield fetch(url,{
@@ -26,7 +32,6 @@ function* createRecord(action) {
 							body: JSON.stringify(action.payload)});
 		let response_json = yield response.json();
 		yield put({type: actions.CREATE_RECORD_RESPONSE_RECEIVED, payload:response_json});
- 		//dispatch(push(`${window.baseRoute}/show/${getState().exhibitShow.exhibit['o:slug']}/edit/${createdRecord['o:id']}`);
 
 	// Failed on the fetch call (timeout, etc)
     }catch(e) {
@@ -39,16 +44,34 @@ function* createRecord(action) {
     }
 }
 
-// Delete a record
+function* createRecordResponseReceived(action){
+
+	// On success...
+	if (typeof action.payload.errors === 'undefined') {
+		 yield put({type: actions.EDITOR_CLOSE_NEW_RECORD});
+		 yield put({type: actions.RECORD_ADDED,record: action.payload});
+
+
+	// On failure...
+	}else{
+	}
+}
+
+// Delete a record on confirm
 function* deleteRecord(action) {
 	let record = action.payload;
 	if (window.confirm(`Are you sure you want to delete the Neatline record "${record['o:title']}"?`)) {
-		debugger
+
+		// Make API call
 		try{
-			console.log(urlFormat(recordsEndpoint, {}, record['o:id']));
 			const response = yield fetch(urlFormat(recordsEndpoint, {}, record['o:id']),{method: 'DELETE'});
 			let response_json = yield response.json();
-			yield put({type: actions.DELETE_RECORD_RESPONSE_RECEIVED, payload:response_json});
+			let newPayload={
+				jsonResponse:response_json,
+				record:action.payload
+			}
+			yield put({type: actions.DELETE_RECORD_RESPONSE_RECEIVED, payload:newPayload});
+
 
 		// Failed on the fetch call (timeout, etc)
 		}catch(e) {
@@ -62,6 +85,15 @@ function* deleteRecord(action) {
 	}
 
 }
+function* deleteRecordResponseReceived(action){
+	// On success...
+	if (typeof action.payload.jsonResponse.errors === 'undefined') {
+		 yield put({type: actions.RECORD_REMOVED,record: action.payload.record});
+
+	// On failure...
+	}else{
+	}
+}
 
 // Update a record
 function* updateRecord(action) {
@@ -74,7 +106,6 @@ function* updateRecord(action) {
 							body: JSON.stringify(record)});
 		let response_json = yield response.json();
 		yield put({type: actions.UPDATE_RECORD_RESPONSE_RECEIVED, payload:response_json});
- 		//dispatch(push(`${window.baseRoute}/show/${getState().exhibitShow.exhibit['o:slug']}/edit/${createdRecord['o:id']}`);
 
 	// Failed on the fetch call (timeout, etc)
 	}catch(e) {
@@ -86,4 +117,15 @@ function* updateRecord(action) {
 					}});
 
     }
+}
+function* updateRecordResponseReceived(action){
+
+	// On success...
+	if (typeof action.payload.errors === 'undefined') {
+		yield put({type: actions.EDITOR_RECORD_SET});
+		yield put({type: actions.RECORD_REPLACED,record: action.payload});
+
+	// On failure...
+	}else{
+	}
 }

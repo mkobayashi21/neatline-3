@@ -33,7 +33,7 @@
 		}else{
 			localStorage.setItem('jwt', jwt);
 			window.jwt = jwt;
-			console.log("JWT: "+jwt+"\nIf page is empty or otherwise unexpected, JWT is likely bad/stale, check and set again: ?jwt=");
+			console.warn("Using JWT: "+jwt+"\nIf page is empty or otherwise unexpected, JWT is likely bad/stale, check and set again: ?jwt=");
 		}
 
 		// Helper: parse GET params

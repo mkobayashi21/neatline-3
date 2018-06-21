@@ -3,6 +3,7 @@ import {Field, reduxForm} from 'redux-form';
 import {Tabs, TabList, Tab, TabPanel} from 'react-tabs';
 import {connect} from 'react-redux';
 import '../css/exhibitForm.css';
+import { SketchPicker } from 'react-color';
 
 const defaultValues = {
 	'o:fill_color': '#00aeff',

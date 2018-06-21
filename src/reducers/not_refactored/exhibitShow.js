@@ -126,19 +126,26 @@ export default function(state = initialState, action) {
 		case actionType.RECORD_ADDED:
 			return {
 				...state,
-				records: state.records.concat(action.record)
+				records: state.records.concat(action.record),
+				editorRecord:action.record,
+				selectedRecord: action.record
 			}
 
 		case actionType.RECORD_REPLACED:
 			return {
 				...state,
-				records: state.records.filter(r => r['o:id'].toString() !== action.record['o:id'].toString()).concat(action.record)
+				records: state.records.filter(r => r['o:id'].toString() !== action.record['o:id'].toString()).concat(action.record),
+				editorRecord:action.record,
+				selectedRecord: action.record
 			}
 
 		case actionType.RECORD_REMOVED:
 			return {
 				...state,
-				records: state.records.filter(r => r['o:id'].toString() !== action.record['o:id'].toString())
+				records: state.records.filter(r => r['o:id'].toString() !== action.record['o:id'].toString()),
+				editorRecord:null,
+				selectedRecord: null,
+				tabIndex:1
 			}
 
 		case actionType.RECORD_COVERAGE_SET:

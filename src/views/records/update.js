@@ -19,7 +19,9 @@ class RecordUpdate extends Component {
 	}
 }
 
-const mapStateToProps = state => ({record: state.record});
+const mapStateToProps = state => ({
+  record: state.exhibitShow.editorRecord
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
 	submit: updateRecord,

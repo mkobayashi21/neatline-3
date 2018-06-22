@@ -3,6 +3,8 @@ import {Field, reduxForm} from 'redux-form';
 import {Tabs, TabList, Tab, TabPanel} from 'react-tabs';
 import {connect} from 'react-redux';
 import '../css/exhibitForm.css';
+
+//https://casesandberg.github.io/react-color/
 import { SketchPicker } from 'react-color';
 
 const defaultValues = {
@@ -60,6 +62,7 @@ let RecordForm = props => {
 					<div>
 						<label htmlFor='o:fill_color'>Fill Color</label>
 						<Field name='o:fill_color' component='input' type='text'/>
+						<SketchPicker />
 					</div>
 					<div>
 						<label htmlFor='o:fill_color_select'>Fill Color (Selected)</label>

@@ -51,7 +51,6 @@ function* createRecordResponseReceived(action){
 		 yield put({type: actions.EDITOR_CLOSE_NEW_RECORD});
 		 yield put({type: actions.RECORD_ADDED,record: action.payload});
 
-
 	// On failure...
 	}else{
 	}

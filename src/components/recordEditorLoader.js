@@ -17,7 +17,7 @@ class RecordEditorLoader extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapPreviewoProps = state => ({
   record: state.exhibitShow.editorRecord
 });
 
@@ -27,6 +27,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 }, dispatch);
 
 export default connect(
-  mapStateToProps,
+  mapPreviewoProps,
   mapDispatchToProps
 )(RecordEditorLoader);

@@ -101,7 +101,7 @@ class ExhibitShow extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapPreviewoProps = state => ({
   userSignedIn: state.user.userSignedIn,
   exhibit: state.exhibitShow.exhibit,
   records: state.exhibitShow.records,
@@ -121,6 +121,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 }, dispatch);
 
 export default connect(
-  mapStateToProps,
+  mapPreviewoProps,
   mapDispatchToProps
 )(ExhibitShow);

@@ -19,7 +19,7 @@ class RecordUpdate extends Component {
 	}
 }
 
-const mapStateToProps = state => ({
+const mapPreviewoProps = state => ({
   record: state.exhibitShow.editorRecord
 });
 
@@ -28,4 +28,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 	deleteRecord
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecordUpdate);
+export default connect(mapPreviewoProps, mapDispatchToProps)(RecordUpdate);

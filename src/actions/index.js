@@ -12,3 +12,5 @@ export const set_availableTileLayers = (payload) => action(types.SET_AVAILABLE_T
 export const createRecord = (payload) => action(types.RECORD_CREATE, payload);
 export const updateRecord = (payload) => action(types.RECORD_UPDATE, payload);
 export const deleteRecord = (payload) => action(types.RECORD_DELETE, payload);
+
+export const preview_fillColor = (payload) => action(types.PREVIEW_FILLCOLOR, payload);

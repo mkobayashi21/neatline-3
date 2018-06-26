@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form'
 import {connect} from 'react-redux';
-import '../css/exhibitForm.css';
 import {set_tileLayer, set_availableTileLayers} from '../actions';
 
 const defaultValues = {
@@ -15,7 +14,7 @@ class ExhibitForm extends Component {
 	// Build layertypes from the set of non-deprecated maps
 	layerTypes = () => {
 		let retval = [];
-		var availableBaseMaps = this.props.mapState.available.baseMaps;
+		var availableBaseMaps = this.props.mapPreview.available.baseMaps;
 		Object.keys(availableBaseMaps).forEach(function(key) {
 			let thisMap = availableBaseMaps[key];
 			if (!thisMap.deprecated) {
@@ -60,7 +59,8 @@ class ExhibitForm extends Component {
 		this.props.dispatch(this.set_availableTileLayers({ids: arrayOfIDs}));
 	}
 	render() {
-		return (<form className='exhibit-form' onSubmit={this.handleSubmit}>
+		return (
+			<form className='exhibit-form' onSubmit={this.handleSubmit}>
 			<fieldset disabled={this.disabled} style={{
 					border: 'none',
 					padding: '0'
@@ -129,11 +129,11 @@ class ExhibitForm extends Component {
 
 ExhibitForm = reduxForm({form: 'exhibit'})(ExhibitForm);
 
-const mapStateToProps = state => ({
-	mapState: state.map,
+const mapPreviewoProps = state => ({
+	mapPreview: state.mapPreview,
 	initialValues: state.exhibitShow.exhibit
 		? state.exhibitShow.exhibit
 		: defaultValues
 });
 
-export default connect(mapStateToProps, null)(ExhibitForm);
+export default connect(mapPreviewoProps, null)(ExhibitForm);

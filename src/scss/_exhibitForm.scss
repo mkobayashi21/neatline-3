@@ -2,11 +2,13 @@
 	display: inline-block;
 }
 
-.exhibit-form fieldset>div {
+.exhibit-form fieldset > div {
 	margin-bottom: 1em;
 }
 
-.exhibit-form input, .exhibit-form textarea, .exhibit-form select {
+.exhibit-form input,
+.exhibit-form select,
+.exhibit-form textarea {
 	max-width: 400px;
 	width: 100%;
 }

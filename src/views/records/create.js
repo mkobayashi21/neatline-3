@@ -9,10 +9,10 @@ const RecordCreate = props => (<div>
 	<p>{props.record.error}</p>
 </div>)
 
-const mapStateToProps = state => ({record: state.record});
+const mapPreviewoProps = state => ({record: state.record});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
 	submit: createRecord
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps,)(RecordCreate);
+export default connect(mapPreviewoProps, mapDispatchToProps,)(RecordCreate);

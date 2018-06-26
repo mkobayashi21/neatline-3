@@ -10,7 +10,7 @@ import exhibitDelete from './not_refactored/exhibitDelete';
 import recordMapLayers from './not_refactored/recordMapLayers';
 
 import recordReducer from './reducer-record.js';
-import mapReducer from './reducer-map.js';
+import mapPreviewReducer from './reducer-mapPreview.js';
 export default combineReducers({
   routing: routerReducer,
   form: formReducer,
@@ -22,6 +22,6 @@ export default combineReducers({
   exhibitDelete,
 
   record: recordReducer,
-  map: mapReducer,
+  mapPreview: mapPreviewReducer,
   recordMapLayers:recordMapLayers
 });

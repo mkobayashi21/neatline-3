@@ -60,7 +60,7 @@ class Exhibits extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapPreviewoProps = state => ({
   userSignedIn: state.user.userSignedIn,
   exhibits: state.exhibits.exhibits,
   exhibitsLoading: state.exhibits.loading,
@@ -77,6 +77,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 }, dispatch);
 
 export default connect(
-  mapStateToProps,
+  mapPreviewoProps,
   mapDispatchToProps
 )(Exhibits);

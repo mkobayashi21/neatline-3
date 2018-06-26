@@ -19,10 +19,10 @@ const Records = props => (<div>
 	</ul>
 </div>)
 
-const mapStateToProps = state => ({records: state.exhibitShow.records, selectedRecord: state.exhibitShow.selectedRecord});
+const mapPreviewoProps = state => ({records: state.exhibitShow.records, selectedRecord: state.exhibitShow.selectedRecord});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
 	selectRecord
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Records);
+export default connect(mapPreviewoProps, mapDispatchToProps)(Records);

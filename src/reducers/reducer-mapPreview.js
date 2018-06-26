@@ -1,14 +1,35 @@
-import initialState from './initialState-map';
+import initialState from './initialState-mapPreview';
 import * as actionType from '../actions/action-types';
 
 export default function app(state = initialState, action) {
 
 	switch (action.type) {
 
+		case actionType.PREVIEW_FILLCOLOR:
+		console.log(action.payload);
+			return{
+				...state,
+				hasUnsavedChanges:true,
+				current: {
+					...state.current,
+					geometryStyle: {
+						...state.current.geometryStyle,
+						fillColor: action.payload.color,
+					}
+				}
+			}
+
+		case actionType.EXHIBIT_PATCH_SUCCESS:
+			return{
+				...state,
+				hasUnsavedChanges:false
+			}
+
 		// Set the tilelayer object based on an ID (array position)
 		case actionType.SET_TILELAYER:
 			return {
 				...state,
+				hasUnsavedChanges:true,
 				current: {
 					...state.current,
 					tileLayer: state.available.baseMaps[action.payload.id]
@@ -23,11 +44,13 @@ export default function app(state = initialState, action) {
 			});
 			return {
 				...state,
+				hasUnsavedChanges:true,
 				current: {
 					...state.current,
 					basemapOptions: availableOptions
 				}
 			};
+
 		default:
 			return state;
 	}

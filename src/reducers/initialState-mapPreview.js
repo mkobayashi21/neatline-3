@@ -1,5 +1,5 @@
 export default {
-
+	hasUnsavedChanges:false,
 	current: {
 		tileLayer: {
 			slug: "OpenStreetMap",
@@ -7,6 +7,12 @@ export default {
 			deprecated: false,
 			attribution: '&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors',
 			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+		},
+		geometryStyle: {
+			stroke: true,
+			color: '#FF00FF',
+			weight: 2,
+			fillColor: '#FF00FF',
 		},
 		basemapOptions: [
 			{

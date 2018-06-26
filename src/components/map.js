@@ -19,12 +19,14 @@ import L from 'leaflet';
 import {EditControl} from "react-leaflet-draw"
 import {circleMarker} from 'leaflet';
 
-// FIXME: work around broken icons when using webpack, see https://github.com/PaulLeCam/react-leaflet/issues/255
+// FIXME: workaround broken icons when using webpack, see https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/images/marker-icon.png', iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/images/marker-icon.png', shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/images/marker-shadow.png'});
 
 // FSC map reminder message
-const SaveMapReminder = props => <div className={props.isVisible?"mapStatus_warning":"mapStatus_warning hidden"}>{props.message}</div>;
+const SaveMapReminder = props => <div className={props.isVisible?"mapStatus_warning":"mapStatus_warning hidden"}>
+									{props.message}
+								 </div>;
 
 class ExhibitPublicMap extends Component {
 

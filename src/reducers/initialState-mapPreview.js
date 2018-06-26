@@ -13,6 +13,7 @@ export default {
 			color: '#FF00FF',
 			weight: 2,
 			fillColor: '#FF00FF',
+
 			fillColor_selected:'#FF00FF',
 			strokeColor:'#FF00FF',
 			strokeColor_selected:'#FF00FF'

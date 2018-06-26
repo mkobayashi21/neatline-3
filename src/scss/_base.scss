@@ -19,3 +19,8 @@ body {
 .invisible{
 	opacity: 0;
 }
+
+.scrollable_content{
+	overflow:scroll;
+	height:50rem;
+}

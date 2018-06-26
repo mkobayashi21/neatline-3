@@ -20,7 +20,7 @@ const defaultValues = {
 	'o:point_radius': 10
 };
 
-// FSC map reminder message
+// FSC ColorPicker
 const ColorPicker = props => <div style={{top:props.top}} className={props.isVisible?"colorPicker_picker":"colorPicker_picker hidden"}><SketchPicker color={props.color} onChangeComplete={ props.handleChange }/></div>;
 
 
@@ -45,9 +45,15 @@ class RecordForm extends Component {
 		};
 	}
 
-	showColorPicker(event){
-		this.setState({	colorPickerVisible:true,
-						colorPickerTop:`${event.target.offsetTop}px`
+	showColorPicker(event,propertyToColor){
+		let parentEl = document.getElementById("scrollArea_stylePropertyPicker");
+
+		let top = (event.target.offsetTop-parentEl.scrollTop);
+		console.log(parentEl.scrollTop);
+		this.setState({
+						colorPickerCurrentlyEditing:propertyToColor,
+						colorPickerVisible:true,
+						colorPickerTop:`${top}px`
 					 });
 	}
 
@@ -59,11 +65,16 @@ class RecordForm extends Component {
 		this.setState({currentColor:color.hex});
 		//this.props.fields.xxx.onChange()
 		console.log(this.state.currentColor);
-		this.props.dispatch(this.preview_fillColor({color: color.hex}));
+		this.setState({[this.state.colorPickerCurrentlyEditing]:color.hex});
+		this.props.dispatch(this.preview_fillColor(
+			{	property: this.state.colorPickerCurrentlyEditing,
+			 	color: color.hex
+			}));
 	}
 
 	render(){
 		return (
+
 			<form className='exhibit-form' onSubmit={this.handleSubmit}>
 
 			{/* The color picker (we just use one and assign it on click */}
@@ -76,179 +87,191 @@ class RecordForm extends Component {
 					<Tab>Text</Tab>
 					<Tab>Style</Tab>
 				</TabList>
-				<TabPanel>
-					<div style={{
-							fontWeight: 'bold'
-						}}>Text Description</div>
-					<fieldset disabled={this.disabled} style={{
-							border: 'none',
-							padding: '0'
-						}}>
-						<div>
-							<label htmlFor='o:slug'>Slug</label>
-							<Field name='o:slug' component='input' type='text'/>
-						</div>
-						<div>
-							<label htmlFor='o:title'>Title</label>
-							<Field name='o:title' component='textarea'/>
-						</div>
-						<div>
-							<label htmlFor='o:body'>Body</label>
-							<Field name='o:body' component='textarea'/>
-						</div>
-					</fieldset>
-				</TabPanel>
-				<TabPanel>
-					<fieldset disabled={this.disabled} style={{
-							border: 'none',
-							padding: '0'
-						}}>
+
+				<div id="scrollArea_stylePropertyPicker" className="scrollable_content" onScroll={this.hideColorPicker}>
+					<TabPanel>
 						<div style={{
 								fontWeight: 'bold'
-							}}>Colors</div>
-						<div>
-							<label htmlFor='o:fill_color'>Fill Color</label>
-							<div className="inputColorSwatch" style={{backgroundColor:this.state.currentColor}}></div>
-							<Field 	name='o:fill_color'
-									component='input'
-									type='text'
-									onFocus={this.showColorPicker}
-									onBlur={this.hideColorPicker}/>
-						</div>
-						<div>
-							<label htmlFor='o:fill_color_select'>Fill Color (Selected)</label>
-							<Field 	name='o:fill_color_select'
-									component='input'
-									type='text'
-									onFocus={this.showColorPicker}
-									onBlur={this.hideColorPicker}/>
-						</div>
-						<div>
-							<label htmlFor='o:stroke_color'>Stroke Color</label>
-							<Field 	name='o:stroke_color'
-									component='input'
-									type='text'
-									onFocus={this.showColorPicker}
-									onBlur={this.hideColorPicker}/>
-						</div>
-						<div>
-							<label htmlFor='o:stroke_color_select'>Stroke Color (Selected)</label>
-							<Field 	name='o:stroke_color_select'
-									component='input'
-									type='text'
-									onFocus={this.showColorPicker}
-									onBlur={this.hideColorPicker}/>
-						</div>
+							}}>Text Description</div>
+						<fieldset disabled={this.disabled} style={{
+								border: 'none',
+								padding: '0'
+							}}>
+							<div>
+								<label htmlFor='o:slug'>Slug</label>
+								<Field name='o:slug' component='input' type='text'/>
+							</div>
+							<div>
+								<label htmlFor='o:title'>Title</label>
+								<Field name='o:title' component='textarea'/>
+							</div>
+							<div>
+								<label htmlFor='o:body'>Body</label>
+								<Field name='o:body' component='textarea'/>
+							</div>
+						</fieldset>
+					</TabPanel>
+					<TabPanel>
+						<fieldset disabled={this.disabled} style={{
+								border: 'none',
+								padding: '0'
+							}}>
+							<div style={{
+									fontWeight: 'bold'
+								}}>Colors</div>
+							<div>
+								<label htmlFor='o:fill_color'>Fill Color</label>
+								<div className="inputColorSwatch" style={{backgroundColor:this.state.fillColor}}></div>
+								<Field 	className="colorPicker_input"
+										name='o:fill_color'
+										component='input'
+										type='text'
+										onFocus={(event)=>this.showColorPicker(event,'fillColor')}
+										onBlur={this.hideColorPicker}/>
+							</div>
+							<div>
+								<label htmlFor='o:fill_color_select'>Fill Color (Selected)</label>
+								<div onClick={(event)=>this.showColorPicker(event,'fillColor_selected')} className="inputColorSwatch" style={{backgroundColor:this.state.fillColor_selected}}></div>
+								<Field 	className="colorPicker_input"
+										name='o:fill_color_select'
+										component='input'
+										type='text'
 
-						<div style={{
-								fontWeight: 'bold',
-								marginTop: '2em'
-							}}>Opacities</div>
-						<div>
-							<label htmlFor='o:fill_opacity'>Fill Opacity</label>
-							<Field name='o:fill_opacity' component='input' type='text'/>
-						</div>
-						<div>
-							<label htmlFor='o:fill_opacity_select'>Fill Opacity (Selected)</label>
-							<Field name='o:fill_opacity_select' component='input' type='text'/>
-						</div>
-						<div>
-							<label htmlFor='o:stroke_opacity'>Stroke Opacity</label>
-							<Field name='o:stroke_opacity_select' component='input' type='text'/>
-						</div>
-						<div>
-							<label htmlFor='o:stroke_opacity'>Fill Opacity</label>
-							<Field name='o:stroke_opacity_select' component='input' type='text'/>
-						</div>
+										onBlur={this.hideColorPicker}/>
+							</div>
+							<div>
+								<label htmlFor='o:stroke_color'>Stroke Color</label>
+								<div className="inputColorSwatch" style={{backgroundColor:this.state.color}}></div>
+								<Field 	className="colorPicker_input"
+										name='o:stroke_color'
+										component='input'
+										type='text'
+										onFocus={(event)=>this.showColorPicker(event,'color')}
+										onBlur={this.hideColorPicker}/>
+							</div>
+							<div>
+								<label htmlFor='o:stroke_color_select'>Stroke Color (Selected)</label>
+								<div className="inputColorSwatch" style={{backgroundColor:this.state.strokeColor_selected}}></div>
+								<Field 	className="colorPicker_input"
+										name='o:stroke_color_select'
+										component='input'
+										type='text'
+										onFocus={(event)=>this.showColorPicker(event,'strokeColor_selected')}
+										onBlur={this.hideColorPicker}/>
+							</div>
 
-						<div style={{
-								fontWeight: 'bold',
-								marginTop: '2em'
-							}}>Dimensions</div>
-						<div>
-							<label htmlFor='o:stroke_width'>Stroke Width</label>
-							<Field name='o:stroke_width' component='input' type='number'/>
-						</div>
-						<div>
-							<label htmlFor='o:point_radius'>Point Radius</label>
-							<Field name='o:point_radius' component='input' type='number'/>
-						</div>
-						<div>
-							<label htmlFor='o:zindex'>Z-Index</label>
-							<Field name='o:zindex' component='input' type='number'/>
-						</div>
-						<div>
-							<label htmlFor='o:weight'>Order / Weight</label>
-							<Field name='o:weight' component='input' type='number'/>
-						</div>
+							<div style={{
+									fontWeight: 'bold',
+									marginTop: '2em'
+								}}>Opacities</div>
+							<div>
+								<label htmlFor='o:fill_opacity'>Fill Opacity</label>
+								<Field name='o:fill_opacity' component='input' type='text'/>
+							</div>
+							<div>
+								<label htmlFor='o:fill_opacity_select'>Fill Opacity (Selected)</label>
+								<Field name='o:fill_opacity_select' component='input' type='text'/>
+							</div>
+							<div>
+								<label htmlFor='o:stroke_opacity'>Stroke Opacity</label>
+								<Field name='o:stroke_opacity_select' component='input' type='text'/>
+							</div>
+							<div>
+								<label htmlFor='o:stroke_opacity'>Fill Opacity</label>
+								<Field name='o:stroke_opacity_select' component='input' type='text'/>
+							</div>
 
-						<div style={{
-								fontWeight: 'bold',
-								marginTop: '2em'
-							}}>Dates</div>
-						<div>
-							<label htmlFor='o:start_date'>Start Date</label>
-							<Field name='o:start_date' component='input' type='text'/>
-						</div>
-						<div>
-							<label htmlFor='o:end_date'>End Date</label>
-							<Field name='o:end_date' component='input' type='text'/>
-						</div>
-						<div>
-							<label htmlFor='o:after_date'>After Date</label>
-							<Field name='o:after_date' component='input' type='text'/>
-						</div>
-						<div>
-							<label htmlFor='o:before_date'>Before Date</label>
-							<Field name='o:before_date' component='input' type='text'/>
-						</div>
+							<div style={{
+									fontWeight: 'bold',
+									marginTop: '2em'
+								}}>Dimensions</div>
+							<div>
+								<label htmlFor='o:stroke_width'>Stroke Width</label>
+								<Field name='o:stroke_width' component='input' type='number'/>
+							</div>
+							<div>
+								<label htmlFor='o:point_radius'>Point Radius</label>
+								<Field name='o:point_radius' component='input' type='number'/>
+							</div>
+							<div>
+								<label htmlFor='o:zindex'>Z-Index</label>
+								<Field name='o:zindex' component='input' type='number'/>
+							</div>
+							<div>
+								<label htmlFor='o:weight'>Order / Weight</label>
+								<Field name='o:weight' component='input' type='number'/>
+							</div>
 
-						<div style={{
-								fontWeight: 'bold',
-								marginTop: '2em'
-							}}>Imagery</div>
-						<div>
-							<label htmlFor='o:point_image'>Point Image</label>
-							<Field name='o:point_image' component='input' type='text'/>
-						</div>
-						<div>
-							<label htmlFor='o:wms_address'>WMS Address</label>
-							<Field name='o:wms_address' component='input' type='text'/>
-						</div>
-						<div>
-							<label htmlFor='o:wms_layers'>WMS Layers</label>
-							<Field name='o:wms_layers' component='input' type='text'/>
-						</div>
+							<div style={{
+									fontWeight: 'bold',
+									marginTop: '2em'
+								}}>Dates</div>
+							<div>
+								<label htmlFor='o:start_date'>Start Date</label>
+								<Field name='o:start_date' component='input' type='text'/>
+							</div>
+							<div>
+								<label htmlFor='o:end_date'>End Date</label>
+								<Field name='o:end_date' component='input' type='text'/>
+							</div>
+							<div>
+								<label htmlFor='o:after_date'>After Date</label>
+								<Field name='o:after_date' component='input' type='text'/>
+							</div>
+							<div>
+								<label htmlFor='o:before_date'>Before Date</label>
+								<Field name='o:before_date' component='input' type='text'/>
+							</div>
 
-						<div style={{
-								fontWeight: 'bold',
-								marginTop: '2em'
-							}}>Visibility</div>
-						<div>
-							<label htmlFor='o:min_zoom'>Min Zoom</label>
-							<Field name='o:min_zoom' component='input' type='number'/>
-						</div>
-						<div>
-							<label htmlFor='o:max_zoom'>Max Zoom</label>
-							<Field name='o:max_zoom' component='input' type='number'/>
-						</div>
-						<div>
-							<label htmlFor='o:map_zoom'>Default Zoom</label>
-							<Field name='o:map_zoom' component='input' type='number'/>
-						</div>
-						<div>
-							<label htmlFor='o:map_focus'>Default Focus</label>
-							<Field name='o:map_focus' component='input' type='text'/>
-						</div>
-					</fieldset>
-				</TabPanel>
+							<div style={{
+									fontWeight: 'bold',
+									marginTop: '2em'
+								}}>Imagery</div>
+							<div>
+								<label htmlFor='o:point_image'>Point Image</label>
+								<Field name='o:point_image' component='input' type='text'/>
+							</div>
+							<div>
+								<label htmlFor='o:wms_address'>WMS Address</label>
+								<Field name='o:wms_address' component='input' type='text'/>
+							</div>
+							<div>
+								<label htmlFor='o:wms_layers'>WMS Layers</label>
+								<Field name='o:wms_layers' component='input' type='text'/>
+							</div>
+
+							<div style={{
+									fontWeight: 'bold',
+									marginTop: '2em'
+								}}>Visibility</div>
+							<div>
+								<label htmlFor='o:min_zoom'>Min Zoom</label>
+								<Field name='o:min_zoom' component='input' type='number'/>
+							</div>
+							<div>
+								<label htmlFor='o:max_zoom'>Max Zoom</label>
+								<Field name='o:max_zoom' component='input' type='number'/>
+							</div>
+							<div>
+								<label htmlFor='o:map_zoom'>Default Zoom</label>
+								<Field name='o:map_zoom' component='input' type='number'/>
+							</div>
+							<div>
+								<label htmlFor='o:map_focus'>Default Focus</label>
+								<Field name='o:map_focus' component='input' type='text'/>
+							</div>
+						</fieldset>
+					</TabPanel>
+				</div>
+
 			</Tabs>
 			<Field name='o:coverage' component='input' type='hidden'/>
 			<Field name='o:is_coverage' component='input' type='hidden'/>
 			<Field name='o:exhibit_id' component='input' type='hidden'/>
 			<button type='submit'>{this.submitLabel}</button>
 			{this.showDelete && <button onClick={this.handleDelete} type='button'>Delete</button>}
-		</form>)
+		</form>
+		)
 	}
 }
 

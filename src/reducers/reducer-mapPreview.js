@@ -14,7 +14,7 @@ export default function app(state = initialState, action) {
 					...state.current,
 					geometryStyle: {
 						...state.current.geometryStyle,
-						fillColor: action.payload.color,
+						[action.payload.property]: action.payload.color,
 					}
 				}
 			}
